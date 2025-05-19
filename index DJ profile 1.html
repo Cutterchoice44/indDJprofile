@@ -2,142 +2,301 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Prevent browser caching of this page -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cutters Choice Radio</title>
-  
-  <!-- Preconnects for faster API/widget loads -->
-  <link rel="preconnect" href="https://app.radiocult.fm">
-  <link rel="preconnect" href="https://widget.mixcloud.com">
-
-  <!-- Main stylesheet -->
-  <link rel="stylesheet" href="style.css?v=1746926219580">
-  <!-- Bebas Neue from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-
-  <!-- Socket.IO client for chat participants -->
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" defer></script>
-
-  <!-- Google Analytics Tag -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3MSGZZ5QL6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}  
-    gtag('js', new Date());
-    gtag('config', 'G-3MSGZZ5QL6');
-  </script>
-
+  <title>DJ Profile - Cutters Choice Radio</title>
+  <style>
+    :root {
+      --teal: #5A8785;
+      --dark: #000;
+      --light: #fafafa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--dark);
+      color: var(--light);
+      font-family: Arial, sans-serif;
+    }
+    .profile-wrapper {
+      margin: 20px;
+      border: 2px solid var(--teal);
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+    /* Column 1: Bio */
+    .bio-section {
+      padding: 20px;
+      border-right: 2px solid var(--teal);
+    }
+    .bio-section h1 {
+      margin: 0 0 10px;
+      font-size: 5rem;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 10px;
+    }
+    .bio-section p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    /* Column 2: Artwork + Socials + Reminder */
+    .column-mid {
+      border-right: 2px solid var(--teal);
+      display: flex;
+      flex-direction: column;
+    }
+    .artwork-block {
+      padding: 20px;
+      border-bottom: 2px solid var(--teal);
+    }
+    .artwork-block img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 2px solid var(--teal);
+    }
+    .info-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .socials-section h2 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 5px;
+    }
+    .socials-section ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .socials-section li {
+      margin: 5px 0;
+      font-size: 1rem;
+    }
+    .socials-section a {
+      color: var(--light);
+      text-decoration: none;
+    }
+    .reminder-section {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+    }
+    .reminder-section h2 {
+      margin: 0;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+    .reminder-line {
+      flex: 1;
+      border-bottom: 2px dashed var(--teal);
+      margin: 0 10px;
+    }
+    .reminder-section img {
+      width: 40px;
+      height: 40px;
+    }
+    /* Column 3: Mixes */
+    .column-right {
+      display: flex;
+      flex-direction: column;
+    }
+    .mixes-section {
+      padding: 20px;
+    }
+    .mixes-section h2 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 5px;
+    }
+    .mixes-list {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    .mix-show {
+      background: #111;
+      padding: 10px;
+      border: 2px solid var(--teal);
+      margin-bottom: 10px;
+    }
+    .mix-show iframe {
+      width: 100%;
+      height: 60px;
+      border: none;
+    }
+    .mix-show button {
+      background: none;
+      border: none;
+      color: var(--teal);
+      text-decoration: underline;
+      cursor: pointer;
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+    .mix-input input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid var(--teal);
+      background: var(--dark);
+      color: var(--light);
+      font-size: 1rem;
+    }
+    .mix-input button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--teal);
+      border: none;
+      color: var(--dark);
+      text-transform: uppercase;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-<header class="header-banner">
-  <div class="header-gif-right"></div>
-  <div class="header-gif-left"></div>
-
-  <div class="logo-container">
-    <img
-      class="logo"
-      src="https://i.imgur.com/72gdPJY.png"
-      alt="Cutters Choice Radio Logo"
-      loading="lazy"
-    >
+  <div class="profile-wrapper">
+    <div class="container">
+      <!-- BIO -->
+      <section class="bio-section">
+        <h1 id="dj-name">Loading...</h1>
+        <div id="dj-bio"><p>Loading bio...</p></div>
+      </section>
+      <!-- ARTWORK + SOCIALS + REMINDER -->
+      <section class="column-mid">
+        <div class="artwork-block">
+          <img id="dj-artwork" src="https://i.imgur.com/qWOfxOS.png" alt="DJ Artwork">
+        </div>
+        <div class="info-block">
+          <div class="socials-section">
+            <h2>Socials/Contact</h2>
+            <ul id="social-links"></ul>
+          </div>
+          <div class="reminder-section">
+            <h2>Get Reminded</h2>
+            <div class="reminder-line"></div>
+            <a id="calendar-btn" href="#" target="_blank">
+              <img src="https://i.imgur.com/3z7W5ln.png" alt="Calendar Icon">
+            </a>
+          </div>
+        </div>
+      </section>
+      <!-- MIXES -->
+      <section class="column-right mixes-section">
+        <h2>Mixes</h2>
+        <div class="mixes-list" id="mixes-list"></div>
+        <div class="mix-input">
+          <input type="text" id="mixcloud-url-input" placeholder="Paste Mixcloud URL here...">
+          <button id="add-show-btn">Add Show</button>
+        </div>
+      </section>
+    </div>
   </div>
+  <script>
+    const API_KEY = "pk_0b8abc6f834b444f949f727e88a728e01e2";
+    const STATION_ID = "cutters-choice-radio";
+    const BASE_URL = "https://api.radiocult.fm/api";
+    const FALLBACK_ART = "https://i.imgur.com/qWOfxOS.png";
+    const MIXCLOUD_PASSWORD = "cutters44";
 
-  <div class="title">
-    <h1>Cutters Choice Radio</h1>
-    <p class="tagline">The home of relentless flavas and significant bangers!</p>
-  </div>
+    function createGoogleCalLink(title, startUtc, endUtc) {
+      if (!startUtc || !endUtc) return "#";
+      const fmt = dt => new Date(dt).toISOString().replace(/-|:|\.\d\d\d/g, '');
+      return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${fmt(startUtc)}/${fmt(endUtc)}`;
+    }
 
-  <div class="logo-container">
-    <img
-      class="logo"
-      src="https://i.imgur.com/72gdPJY.png"
-      alt="Cutters Choice Radio Logo"
-      loading="lazy"
-    >
-  </div>
-</header>
+    async function initPage() {
+      const params = new URLSearchParams(window.location.search);
+      const djSlug = params.get('dj');
+      if (!djSlug) return;
 
-<div class="teal-line"></div>
-  
-<div class="grid-container">
-  <!-- CHAT SECTION -->
-  <section class="chat">
-    <h2>Cutters Chat</h2>
-    <iframe
-      title="Cutters Choice Radio Chat"
-      src="https://app.radiocult.fm/embed/chat/cutters-choice-radio?theme=midnight&primaryColor=%235A8785&corners=sharp"
-      width="100%" height="700" frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-      seamless loading="lazy">
-    </iframe>
-    <div class="chat-actions">
-      <button class="popout-btn" onclick="openChatPopup()">Pop Out Chat</button>
-    </div>
-    <div class="rc-user-list-container">
-      <h3></h3>
-      <div class="rc-user-list"></div>
-    </div>
-  </section>
+      // Fetch artist by slug
+      const artistRes = await fetch(`${BASE_URL}/artists?slug=${djSlug}&apiKey=${API_KEY}`);
+      const artistArr = await artistRes.json();
+      const artist = Array.isArray(artistArr) ? artistArr[0] : artistArr;
 
-  <!-- LIVE PLAYER SECTION -->
-  <section class="live-player">
-    <h2 id="now-dj">Live Now</h2>
-    <div class="player-container">
-      <iframe id="inlinePlayer"
-        title="Cutters Choice Radio player"
-        src="https://app.radiocult.fm/embed/square-player/cutters-choice-radio?theme=midnight&primaryColor=%235A8785&corners=sharp"
-        allow="autoplay" loading="lazy">
-      </iframe>
-      <div id="now-archive">Loading archive show…</div>
-      <button id="popOutBtn" class="popout-btn">Pop Out Player</button>
-      <button id="chatPopupBtn" class="popout-btn chat-btn-mobile" onclick="openChatPopup()">Chat</button>
-    </div>
-    <h3>This Weeks Shows</h3>
-    <img id="now-art" src="https://i.imgur.com/EHhS47F.png" alt="Current DJ Artwork" loading="lazy">
-  </section>
+      // Only show profiles tagged "WEBSITE"
+      if (!artist.tags || !artist.tags.includes('WEBSITE')) {
+        document.body.innerHTML = '<p style="color:var(--light);font-size:2rem;text-align:center;margin-top:50px;">Profile not available</p>';
+        return;
+      }
 
-  <!-- SCHEDULE SECTION -->
-  <section class="schedule">
-    <h2 class="schedule-heading">This Week’s Lineup</h2>
-    <div class="schedule-scroll" id="schedule-container">
-      <p>Loading this week’s schedule…</p>
-    </div>
-  </section>
+      // Name & Bio
+      document.getElementById('dj-name').textContent = artist.name;
+      document.getElementById('dj-bio').innerHTML = `<p>${artist.bio || ''}</p>`;
 
-    <!-- MIXCLOUD ARCHIVE SECTION -->
-  <section class="mixcloud">
-    <h2>Latest Archived Shows</h2>
-    <div id="mixcloud-list"></div>
-    <div class="add-mixcloud">
-      <input id="mixcloud-url" type="text" placeholder="Paste Mixcloud URL here…">
-      <button onclick="addMixcloud()">Add Show</button>
-    </div>
-  </section>
-</div> <!-- end grid-container -->
+      // Artwork
+      document.getElementById('dj-artwork').src = artist.avatar || FALLBACK_ART;
 
-<footer class="banner">
-  <a href="#merch">Merch</a>
-  <a href="#djs">Our DJs</a>
-  <a href="#events">Events</a>
-  <a href="#history">History</a>
-</footer>
+      // Social Links
+      const socialLinks = document.getElementById('social-links');
+      socialLinks.innerHTML = '';
+      if (artist.socialLinks) {
+        Object.entries(artist.socialLinks).forEach(([platform, url]) => {
+          if (url) {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${url}" target="_blank">${platform.charAt(0).toUpperCase() + platform.slice(1)}</a>`;
+            socialLinks.appendChild(li);
+          }
+        });
+      }
 
-    <script src="script.js?v=1746926219580" defer></script>
-    <script src="slideshow.js?v=1746926219580" defer></script>
+      // Next show & calendar
+      const schedRes = await fetch(`${BASE_URL}/schedules?station=${STATION_ID}&artist=${artist.id}&limit=1&apiKey=${API_KEY}`);
+      const schedData = await schedRes.json();
+      if (schedData.length) {
+        const show = schedData[0];
+        const link = createGoogleCalLink(`DJ ${artist.name} Live Set`, show.startUtc, show.endUtc);
+        document.getElementById('calendar-btn').href = link;
+      } else {
+        document.getElementById('calendar-btn').style.display = 'none';
+      }
 
-    <!-- Chat Modal for Mobile -->
-    <div id="chatModal" style="display:none;">
-      <div class="modal-content">
-        <button class="close-btn" onclick="closeChatModal()">Close</button>
-        <iframe
-          id="chatModalIframe"
-          title="Cutters Chat Modal"
-          allow="autoplay">
-        </iframe>
-      </div>
-    </div>
-  </body>
+      // Mixcloud archive
+      const key = `${djSlug}-mixcloud-urls`;
+      const loadShows = () => {
+        const container = document.getElementById('mixes-list');
+        container.innerHTML = '';
+        (JSON.parse(localStorage.getItem(key)) || []).forEach(url => {
+          const div = document.createElement('div');
+          div.className = 'mix-show';
+          div.innerHTML = `
+            <iframe src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&light=1&feed=${encodeURIComponent(url)}" allow="autoplay"></iframe>
+            <button data-url="${url}">Remove show</button>
+          `;
+          div.querySelector('button').onclick = () => {
+            const urls = JSON.parse(localStorage.getItem(key)) || [];
+            localStorage.setItem(key, JSON.stringify(urls.filter(u => u !== url)));
+            loadShows();
+          };
+          container.appendChild(div);
+        });
+      };
+      loadShows();
+      document.getElementById('add-show-btn').onclick = () => {
+        const pwd = prompt('Enter password to add a show:');
+        if (pwd !== MIXCLOUD_PASSWORD) return alert('Incorrect password');
+        const url = document.getElementById('mixcloud-url-input').value.trim();
+        if (url) {
+          const arr = JSON.parse(localStorage.getItem(key)) || [];
+          arr.push(url);
+          localStorage.setItem(key, JSON.stringify(arr));
+          loadShows();
+          document.getElementById('mixcloud-url-input').value = '';
+        }
+      };
+    }
+    window.addEventListener('DOMContentLoaded', initPage);
+  </script>
+</body>
 </html>
